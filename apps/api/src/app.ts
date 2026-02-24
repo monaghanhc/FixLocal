@@ -8,11 +8,15 @@ import { env } from './env.js';
 import { reportRouter } from './routes/reportRoutes.js';
 
 export const app = express();
+app.set('trust proxy', 1);
+
+const corsOrigin = env.API_CORS_ORIGIN.trim();
+const corsOrigins = corsOrigin === '*' ? '*' : corsOrigin.split(',').map((origin) => origin.trim());
 
 app.use(helmet());
 app.use(
   cors({
-    origin: env.API_CORS_ORIGIN === '*' ? true : env.API_CORS_ORIGIN,
+    origin: corsOrigins === '*' ? true : corsOrigins,
   }),
 );
 app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));

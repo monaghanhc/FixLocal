@@ -15,6 +15,17 @@ coverage
 .env.*
 !.env.example
 
+# Credentials / signing assets
+*.pem
+*.p12
+*.p8
+*.jks
+*.keystore
+*.mobileprovision
+apps/mobile/credentials/
+apps/mobile/google-services.json
+apps/mobile/GoogleService-Info.plist
+
 # OS
 .DS_Store
 Thumbs.db

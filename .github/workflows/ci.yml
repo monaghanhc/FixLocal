@@ -35,3 +35,9 @@ jobs:
 
       - name: API tests
         run: pnpm --filter @fixlocal/api test
+
+      - name: Mobile tests
+        run: pnpm --filter @fixlocal/mobile test
+
+      - name: API build
+        run: pnpm --filter @fixlocal/api build

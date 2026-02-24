@@ -45,6 +45,12 @@ export class ApiError extends Error {
 }
 
 const buildUrl = (path: string): string => {
+  if (!appConfig.apiBaseUrl) {
+    throw new Error(
+      'Missing EXPO_PUBLIC_API_URL. Configure API URL in EAS environment variables before release builds.',
+    );
+  }
+
   return `${appConfig.apiBaseUrl.replace(/\/$/, '')}${path}`;
 };
 

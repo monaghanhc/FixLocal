@@ -7,6 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "eas:build:ios": "eas build --platform ios --profile production",
+    "eas:build:android": "eas build --platform android --profile production",
+    "eas:submit:ios": "eas submit --platform ios --profile production",
+    "eas:submit:android": "eas submit --platform android --profile production",
     "lint": "eslint app src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"

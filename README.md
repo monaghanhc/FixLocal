@@ -24,7 +24,8 @@ FixLocal is an Expo + Node.js MVP for reporting civic issues (potholes, graffiti
   - Resend email sending
   - OpenAI Responses API draft generation with safe fallback template
 - Shared package (`packages/shared`) for types/schemas
-- CI (`.github/workflows/ci.yml`) running lint + typecheck + API tests
+- CI (`.github/workflows/ci.yml`) running lint + typecheck + API/mobile tests + API build
+- Secret scanning (`.github/workflows/secret-scan.yml`) with Gitleaks
 
 ## Monorepo layout
 
@@ -84,8 +85,13 @@ Start from `apps/mobile/.env.example`:
 - `EXPO_PUBLIC_API_URL`
 - `EXPO_PUBLIC_SUPABASE_URL`
 - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- `EXPO_PUBLIC_EAS_PROJECT_ID`
+- `EXPO_IOS_BUNDLE_ID`
+- `EXPO_ANDROID_PACKAGE`
 
 For physical devices, set `EXPO_PUBLIC_API_URL` to your machine LAN IP (not `localhost`).
+
+`apps/mobile/app.config.ts` is store-oriented and reads env at build time.
 
 ## Supabase schema + migrations
 
@@ -211,24 +217,18 @@ pnpm --filter @fixlocal/mobile test
 
 ## Deploy backend (Render)
 
-Create a **Web Service** from this repo and configure:
+Use the included Render blueprint:
 
-- Root directory: repository root
-- Build command:
+- [render.yaml](render.yaml)
 
-```bash
-pnpm install --frozen-lockfile && pnpm --filter @fixlocal/api build
-```
+Flow:
 
-- Start command:
+1. In Render, create a new Blueprint service from this repo.
+2. Render will provision `fixlocal-api` using `render.yaml`.
+3. Set all `sync: false` env vars in the Render dashboard from `apps/api/.env.example`.
+4. Confirm health check at `/health`.
 
-```bash
-pnpm --filter @fixlocal/api start
-```
-
-- Add all API env vars from `apps/api/.env.example`.
-
-After deploy, set `EXPO_PUBLIC_API_URL` in mobile env to the Render URL.
+After deploy, set `EXPO_PUBLIC_API_URL` in EAS environment variables to your Render URL.
 
 ## Expo EAS setup and release builds
 
@@ -240,6 +240,20 @@ pnpm exec eas build:configure
 ```
 
 `apps/mobile/eas.json` already includes `development`, `preview`, and `production` profiles.
+Build profiles are tied to EAS environments (`development`, `preview`, `production`) and channels.
+
+### Configure EAS environment variables
+
+Create EAS env vars (dashboard or CLI) for each environment:
+
+- `EXPO_PUBLIC_API_URL`
+- `EXPO_PUBLIC_SUPABASE_URL`
+- `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- `EXPO_PUBLIC_EAS_PROJECT_ID`
+- `EXPO_IOS_BUNDLE_ID`
+- `EXPO_ANDROID_PACKAGE`
+
+Do not commit real values to git.
 
 Build examples:
 
@@ -247,6 +261,26 @@ Build examples:
 pnpm exec eas build --platform ios --profile preview
 pnpm exec eas build --platform android --profile production
 ```
+
+Store submit examples:
+
+```bash
+pnpm eas:submit:ios
+pnpm eas:submit:android
+```
+
+### App Store / Play Store readiness checklist
+
+1. Set unique identifiers:
+   - `EXPO_IOS_BUNDLE_ID` (for example `com.acme.fixlocal`)
+   - `EXPO_ANDROID_PACKAGE` (same format)
+2. Configure app signing in EAS credentials manager.
+3. Set production API + Supabase public vars in EAS `production` environment.
+4. Build production artifacts:
+   - iOS: `pnpm eas:build:ios`
+   - Android: `pnpm eas:build:android`
+5. Submit builds to stores (or upload manually).
+6. Complete store listing assets and privacy forms.
 
 ## Manual smoke test (MVP)
 
@@ -262,3 +296,9 @@ pnpm exec eas build --platform android --profile production
    - success (or documented failure reason)
    - report appears in History with status + thumbnail.
 
+## Secret hygiene
+
+- Real secrets are not stored in this repository.
+- `.env` and signing credential files are gitignored.
+- CI runs Gitleaks to detect accidental secret commits.
+- If a secret is ever leaked, rotate it immediately in provider dashboards (Supabase/OpenAI/Resend/EAS).
