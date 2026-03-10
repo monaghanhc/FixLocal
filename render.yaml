@@ -16,7 +16,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_CORS_ORIGIN
-        sync: false
+        value: '*'
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY

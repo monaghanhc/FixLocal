@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import type { Session } from '@supabase/supabase-js';
+import * as Linking from 'expo-linking';
 import { hasSupabaseConfig } from '../config';
 import { supabase } from '../lib/supabase';
 
@@ -84,7 +85,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           email,
           options: {
             shouldCreateUser: true,
-            emailRedirectTo: 'fixlocal://',
+            emailRedirectTo: Linking.createURL('/'),
           },
         });
         if (error) {

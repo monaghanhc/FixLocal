@@ -58,6 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       bundler: 'metro',
       output: 'static',
       favicon: './assets/images/favicon.png',
+      baseUrl: readEnv('EXPO_APP_BASE_PATH', ''),
     },
     plugins: ['expo-router', 'expo-image-picker', 'expo-location'],
     experiments: {
