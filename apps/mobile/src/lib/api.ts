@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import type { ReportPayload, ReportRecord } from '@fixlocal/shared';
 import { appConfig } from '../config';
 
@@ -81,13 +82,24 @@ export const submitReport = async (input: SubmitReportInput): Promise<SubmitRepo
     formData.append('body', input.body.trim());
   }
 
-  input.photos.forEach((photo, index) => {
-    formData.append('photos', {
-      uri: photo.uri,
-      name: photo.name || `issue-${index + 1}.jpg`,
-      type: photo.type || 'image/jpeg',
-    } as never);
-  });
+  await Promise.all(
+    input.photos.map(async (photo, index) => {
+      if (Platform.OS === 'web') {
+        // On web, fetch the blob from the URI and append as File
+        const response = await fetch(photo.uri);
+        const blob = await response.blob();
+        const fileName = photo.name || `issue-${index + 1}.jpg`;
+        const file = new File([blob], fileName, { type: photo.type || 'image/jpeg' });
+        formData.append('photos', file);
+      } else {
+        formData.append('photos', {
+          uri: photo.uri,
+          name: photo.name || `issue-${index + 1}.jpg`,
+          type: photo.type || 'image/jpeg',
+        } as never);
+      }
+    })
+  );
 
   const response = await fetch(buildUrl('/api/report'), {
     method: 'POST',
@@ -121,3 +133,12 @@ export const getReports = async (token: string, userId: string): Promise<ReportR
 
   return payload.reports ?? [];
 };
+
+export async function getLeaderboard(period: 'all' | 'weekly' = 'all') {
+  const response = await fetch(buildUrl(`/api/leaderboard?period=${period}`));
+  if (!response.ok) throw new ApiError('Failed to fetch leaderboard', response.status, null);
+  return response.json() as Promise<{
+    period: string;
+    leaderboard: { rank: number; displayName: string; reportCount: number; isCurrentUser: boolean }[];
+  }>;
+}

@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Location from 'expo-location';
-import { useNetInfo } from '@react-native-community/netinfo';
+import { useNetworkStatus } from '@/src/hooks/useNetworkStatus';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -19,7 +19,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { IssueTypePicker } from '@/src/components/IssueTypePicker';
 import { ApiError, submitReport, type LocalPhoto } from '@/src/lib/api';
 import { useAuth } from '@/src/providers/AuthProvider';
 
@@ -65,7 +65,7 @@ const normalizeAsset = async (asset: ImagePicker.ImagePickerAsset): Promise<Loca
 
 export default function ReportIssueScreen() {
   const router = useRouter();
-  const netInfo = useNetInfo();
+  const isConnected = useNetworkStatus();
   const { session } = useAuth();
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
   const [photos, setPhotos] = useState<LocalPhoto[]>([]);
@@ -96,7 +96,7 @@ export default function ReportIssueScreen() {
     },
   });
 
-  const isOffline = netInfo.isConnected === false;
+  const isOffline = isConnected === false;
 
   const canGeneratePreview = useMemo(() => {
     return !isOffline && photos.length > 0 && Boolean(coordinates) && !isGeneratingPreview;
@@ -463,17 +463,13 @@ export default function ReportIssueScreen() {
             name="issueType"
             render={({ field: { value, onChange } }) => (
               <View style={styles.pickerWrap}>
-                <Picker
-                  selectedValue={value}
-                  onValueChange={(nextValue) => {
+                <IssueTypePicker
+                  value={value}
+                  onChange={(nextValue) => {
                     onChange(nextValue);
                     setHasPreview(false);
                   }}
-                >
-                  {issueTypeOptions.map((option) => (
-                    <Picker.Item key={option} label={option} value={option} />
-                  ))}
-                </Picker>
+                />
               </View>
             )}
           />

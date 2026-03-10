@@ -6,6 +6,7 @@ import multer from 'multer';
 import { ZodError } from 'zod';
 import { env } from './env.js';
 import { reportRouter } from './routes/reportRoutes.js';
+import leaderboardRouter from './routes/leaderboardRoutes.js';
 
 export const app = express();
 app.set('trust proxy', 1);
@@ -27,6 +28,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api', reportRouter);
+app.use('/api', leaderboardRouter);
 
 app.use((error: unknown, _req: Request, res: Response, next: NextFunction) => {
   void next;
