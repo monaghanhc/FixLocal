@@ -1,0 +1,18 @@
+node_modules
+dist
+*.tsbuildinfo
+
+# Env — never commit real values
+.env
+.env.*
+!.env.example
+
+# Credentials / signing assets
+*.pem
+*.p12
+*.p8
+*.jks
+*.keystore
+
+# OS
+.DS_Store
