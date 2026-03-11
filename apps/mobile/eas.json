@@ -15,6 +15,11 @@
       "channel": "preview",
       "environment": "preview"
     },
+    "simulator": {
+      "ios": {
+        "simulator": true
+      }
+    },
     "production": {
       "autoIncrement": true,
       "channel": "production",

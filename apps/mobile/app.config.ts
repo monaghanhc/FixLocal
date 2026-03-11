@@ -11,7 +11,7 @@ const readEnv = (key: string, fallback = ''): string => {
 };
 
 export default ({ config }: ConfigContext): ExpoConfig => {
-  const easProjectId = readEnv('EXPO_PUBLIC_EAS_PROJECT_ID');
+  const easProjectId = readEnv('EXPO_PUBLIC_EAS_PROJECT_ID', '17c21396-0cdb-4c47-a3ec-9b0c8163ea3d');
 
   return {
     ...config,
