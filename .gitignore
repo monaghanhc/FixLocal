@@ -29,3 +29,14 @@ apps/mobile/GoogleService-Info.plist
 # OS
 .DS_Store
 Thumbs.db
+
+# Build outputs / app bundles (never commit binaries)
+*.aab
+*.apk
+*.ipa
+
+# Vercel deployment metadata
+.vercel
+
+# Expo-generated app.json (dynamic config only)
+/app.json

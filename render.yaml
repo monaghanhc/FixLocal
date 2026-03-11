@@ -16,7 +16,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_CORS_ORIGIN
-        value: '*'
+        value: 'https://mobile-kappa-virid.vercel.app,https://fixlocal.vercel.app'
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
