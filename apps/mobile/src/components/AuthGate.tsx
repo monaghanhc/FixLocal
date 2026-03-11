@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Alert, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { z } from 'zod';
 import { hasSupabaseConfig } from '../config';
 import { useAuth } from '../providers/AuthProvider';
@@ -12,6 +13,7 @@ const emailSchema = z.string().trim().email('Enter a valid email address.');
 
 export const AuthGate = ({ initializationError }: AuthGateProps) => {
   const { signInAnonymously, sendMagicLink } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isLoadingAnon, setIsLoadingAnon] = useState(false);
   const [isLoadingMagicLink, setIsLoadingMagicLink] = useState(false);
@@ -108,6 +110,17 @@ export const AuthGate = ({ initializationError }: AuthGateProps) => {
             {isLoadingMagicLink ? 'Sending...' : 'Send Magic Link'}
           </Text>
         </Pressable>
+
+        <View style={styles.legalRow}>
+          <Text style={styles.legalText}>By continuing you agree to our </Text>
+          <Pressable onPress={() => router.push('/terms')}>
+            <Text style={styles.legalLink}>Terms of Service</Text>
+          </Pressable>
+          <Text style={styles.legalText}> and </Text>
+          <Pressable onPress={() => router.push('/privacy')}>
+            <Text style={styles.legalLink}>Privacy Policy</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -189,5 +202,20 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#991b1b',
     fontSize: 13,
+  },
+  legalRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  legalText: {
+    fontSize: 12,
+    color: '#64748b',
+  },
+  legalLink: {
+    fontSize: 12,
+    color: '#0f766e',
+    textDecorationLine: 'underline',
   },
 });
