@@ -111,6 +111,14 @@ export const AuthGate = ({ initializationError }: AuthGateProps) => {
           </Text>
         </Pressable>
 
+        <Pressable
+          style={[styles.skipButton, (!hasSupabaseConfig || isLoadingAnon) && styles.disabledButton]}
+          disabled={!hasSupabaseConfig || isLoadingAnon}
+          onPress={handleAnonymous}
+        >
+          <Text style={styles.skipText}>Skip →</Text>
+        </Pressable>
+
         <View style={styles.legalRow}>
           <Text style={styles.legalText}>By continuing you agree to our </Text>
           <Pressable onPress={() => router.push('/terms')}>
@@ -202,6 +210,17 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#991b1b',
     fontSize: 13,
+  },
+  skipButton: {
+    alignSelf: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 4,
+  },
+  skipText: {
+    fontSize: 15,
+    color: '#94a3b8',
+    textDecorationLine: 'underline',
   },
   legalRow: {
     flexDirection: 'row',
