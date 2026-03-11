@@ -6,8 +6,8 @@ services:
     rootDir: .
     autoDeploy: true
     healthCheckPath: /health
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @fixlocal/api build
-    startCommand: corepack enable && pnpm --filter @fixlocal/api start
+    buildCommand: npm install -g pnpm && pnpm install --frozen-lockfile && pnpm --filter @fixlocal/api build
+    startCommand: npx --yes pnpm --filter @fixlocal/api start
     envVars:
       - key: NODE_VERSION
         value: 20
@@ -16,15 +16,15 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_CORS_ORIGIN
-        value: 'https://mobile-kappa-virid.vercel.app,https://fixlocal.vercel.app'
+        value: 'https://fixlocal-app.vercel.app,https://mobile-kappa-virid.vercel.app'
       - key: SUPABASE_URL
-        sync: false
+        value: https://vrrohlxbbumyxiadpwny.supabase.co
       - key: SUPABASE_ANON_KEY
-        sync: false
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZycm9obHhiYnVteXhpYWRwd255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTg3ODgsImV4cCI6MjA4NzUzNDc4OH0.l9LLtUXykjpmG7Vz7DOBIipe_IpUIX3ahp0FxyExv1o
       - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
+        value: ***REMOVED***
       - key: SUPABASE_JWT_SECRET
-        sync: false
+        value: ***REMOVED***
       - key: SUPABASE_STORAGE_BUCKET
         value: report-photos
       - key: OPENAI_API_KEY
