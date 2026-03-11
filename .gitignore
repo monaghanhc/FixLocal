@@ -40,3 +40,4 @@ Thumbs.db
 
 # Expo-generated app.json (dynamic config only)
 /app.json
+*.tar.gz
