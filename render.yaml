@@ -32,11 +32,11 @@ services:
       - key: OPENAI_MODEL
         value: gpt-4.1-mini
       - key: RESEND_API_KEY
-        sync: false
+        value: ***REMOVED***
       - key: EMAIL_FROM
-        sync: false
+        value: FixLocal Reports <onboarding@resend.dev>
       - key: EMAIL_REPLY_TO
-        sync: false
+        value: hunter.monaghan5@gmail.com
       - key: DEFAULT_CONTACT_NAME
         value: 311 Public Works Intake
       - key: DEFAULT_CONTACT_EMAIL
