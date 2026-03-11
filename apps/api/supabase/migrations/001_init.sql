@@ -46,16 +46,20 @@ create index if not exists reports_user_created_idx on public.reports (user_id, 
 alter table public.authorities enable row level security;
 alter table public.reports enable row level security;
 
-create policy if not exists "No direct anonymous authority access"
-  on public.authorities
-  for all
-  to anon
-  using (false)
-  with check (false);
+do $$ begin
+  if not exists (
+    select 1 from pg_policies where tablename = 'authorities' and policyname = 'No direct anonymous authority access'
+  ) then
+    create policy "No direct anonymous authority access"
+      on public.authorities for all to anon using (false) with check (false);
+  end if;
+end $$;
 
-create policy if not exists "No direct anonymous report access"
-  on public.reports
-  for all
-  to anon
-  using (false)
-  with check (false);
+do $$ begin
+  if not exists (
+    select 1 from pg_policies where tablename = 'reports' and policyname = 'No direct anonymous report access'
+  ) then
+    create policy "No direct anonymous report access"
+      on public.reports for all to anon using (false) with check (false);
+  end if;
+end $$;
