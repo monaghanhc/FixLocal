@@ -16,15 +16,15 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_CORS_ORIGIN
-        value: 'https://fixlocal-app.vercel.app,https://mobile-kappa-virid.vercel.app'
+        value: 'https://fixlocal-app.vercel.app,https://mobile-kappa-virid.vercel.app,https://monaghanhc.github.io'
       - key: SUPABASE_URL
         value: https://vrrohlxbbumyxiadpwny.supabase.co
       - key: SUPABASE_ANON_KEY
         value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZycm9obHhiYnVteXhpYWRwd255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTg3ODgsImV4cCI6MjA4NzUzNDc4OH0.l9LLtUXykjpmG7Vz7DOBIipe_IpUIX3ahp0FxyExv1o
       - key: SUPABASE_SERVICE_ROLE_KEY
-        value: ***REMOVED***
+        sync: false
       - key: SUPABASE_JWT_SECRET
-        value: ***REMOVED***
+        value: 7fce990f-5705-44e7-96e0-63f4fc42b76d
       - key: SUPABASE_STORAGE_BUCKET
         value: report-photos
       - key: OPENAI_API_KEY
@@ -32,7 +32,7 @@ services:
       - key: OPENAI_MODEL
         value: gpt-4.1-mini
       - key: RESEND_API_KEY
-        value: ***REMOVED***
+        sync: false
       - key: EMAIL_FROM
         value: FixLocal Reports <onboarding@resend.dev>
       - key: EMAIL_REPLY_TO
